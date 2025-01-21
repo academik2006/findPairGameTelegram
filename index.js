@@ -1,3 +1,6 @@
+//Этот код создает и управляет ботами в Telegram, позволяя пользователям играть в простые игры,
+//отслеживать свои достижения и взаимодействовать с приложением через веб-интерфейс.
+
 const express = require("express");
 const path = require("path");
 const TelegramBot = require("node-telegram-bot-api");
@@ -31,6 +34,10 @@ bot.on("inline_query", function (iq) {
         game_short_name: gameName
     }]);
 });
+bot.use(async (ctx) => {
+    await ctx.reply(JSON.stringify(ctx.update, null, 2));
+});
+bot.launch().then(() => console.log('Started'));
 server.get("/highscore/:score", function (req, res, next) {
     if (!Object.hasOwnProperty.call(queries, req.query.id)) return next();
     let query = queries[req.query.id];
