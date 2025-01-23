@@ -13,8 +13,26 @@ const port = process.env.PORT || 5000;
 const gameName = "findSushiPair";
 const queries = {};
 server.use(express.static(path.join(__dirname, 'findPairGameTelegram')));
+
+bot.onText(/win1/, (msg) => {
+    console.log('Считаем скидку по первой категории')
+
+});
+
+bot.onText(/win2/, (msg) => {
+    console.log('Считаем скидку по второй категории')
+
+});
+bot.onText(/win3/, (msg) => {
+    console.log('Считаем скидку по третьей категории')
+
+});
 bot.onText(/help/, (msg) => bot.sendMessage(msg.from.id, "This bot implements a T-Rex jumping game. Say /game if you want to play."));
-bot.onText(/start|game/, (msg) => bot.sendGame(msg.from.id, gameName));
+bot.onText(/start|game/, (msg) => {
+    bot.sendGame(msg.from.id, gameName)
+    console.log(msg.from.id)
+
+});
 bot.on("callback_query", function (query) {
     if (query.game_short_name !== gameName) {
         bot.answerCallbackQuery(query.id, "Sorry, '" + query.game_short_name + "' is not available.");
@@ -34,7 +52,6 @@ bot.on("inline_query", function (iq) {
         game_short_name: gameName
     }]);
 });
-
 server.get("/highscore/:score", function (req, res, next) {
     if (!Object.hasOwnProperty.call(queries, req.query.id)) return next();
     let query = queries[req.query.id];
